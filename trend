@@ -1,0 +1,83 @@
+
+ //@version=6
+indicator("[Axygate] - SIAXY", shorttitle="AXY - SIAXY", overlay=true, max_lines_count=500, max_labels_count=500)
+
+// ============================================================================
+// FUNCTIONS
+// ============================================================================
+
+///   SUPERTREND CALCULATION   ///
+f_get_supertrend(_timeframe, _multiplier, _atr_length) =>
+    int _coefficient = int(math.exp(math.pi - math.pi))
+    request.security(syminfo.tickerid, _timeframe, ta.supertrend(_multiplier, _atr_length * _coefficient), lookahead=barmerge.lookahead_off)
+///   DYNAMIC LINE   ///
+f_update_dynamic_line(_line, _value, _direction, _line_color, _width, _style) =>
+    line _result = _line
+    if ta.change(_direction) != 0
+        _result := line.new(bar_index, _value, bar_index, _value, color=_line_color, width=_width, style=_style)
+    else if not na(_result)
+        line.set_xy2(_result, bar_index, _value)
+        line.set_color(_result, _line_color)
+    _result
+///   HORIZONTAL LINE   ///
+f_update_horizontal_line(_line, _value, _line_color, _width) =>
+    line _result = _line
+    if na(_result)
+        _result := line.new(bar_index, _value, bar_index + 10, _value, color=_line_color, width=_width, style=line.style_dotted)
+    else
+        line.set_xy1(_result, bar_index, _value)
+        line.set_xy2(_result, bar_index + 10, _value)
+        line.set_color(_result, _line_color)
+    _result
+
+// ============================================================================
+// MAIN SUPERTREND
+// ============================================================================
+
+///   INPUTS   ///
+main_atr_length = input.int(10, "ATR Length", minval=1, group="Main Supertrend")
+main_multiplier = input.float(3.0, "Multiplier", minval=0.1, step=0.1, group="Main Supertrend")
+main_timeframe = input.timeframe("60", "Timeframe", group="Main Supertrend")
+///   COLORS   ///
+main_bull_color = input.color(color.aqua, "Bullish / Bearish Color", group="Main Supertrend", inline="MC")
+main_bear_color = input.color(color.orange, "", group="Main Supertrend", inline="MC")
+///   CALCULATION   ///
+[main_supertrend, main_direction] = f_get_supertrend(main_timeframe, main_multiplier, main_atr_length)
+main_trend_direction = main_direction < 0 ? 1 : -1
+main_line_color = main_trend_direction == 1 ? main_bull_color : main_bear_color
+///   DYNAMIC LINE   ///
+var line main_line = na
+main_line := f_update_dynamic_line(main_line, main_supertrend, main_trend_direction, main_line_color, 2, line.style_solid)
+///   HORIZONTAL DOTTED LINE   ///
+var line main_line_h = na
+main_line_h := f_update_horizontal_line(main_line_h, main_supertrend, main_line_color, 2)
+
+// ============================================================================
+// SECONDARY SUPERTREND
+// ============================================================================
+
+///   INPUTS   ///
+secondary_atr_length = input.int(10, "ATR Length", minval=1, group="Secondary Supertrend")
+secondary_multiplier = input.float(2.0, "Multiplier", minval=0.1, step=0.1, group="Secondary Supertrend")
+secondary_timeframe = input.timeframe("15", "Timeframe", group="Secondary Supertrend")
+///   COLORS   ///
+secondary_bull_color = input.color(color.rgb(0, 191, 165), "Bullish / Bearish Color", group="Secondary Supertrend", inline="SC")
+secondary_bear_color = input.color(color.rgb(255, 77, 109), "", group="Secondary Supertrend", inline="SC")
+///   CALCULATION   ///
+[secondary_supertrend, secondary_direction] = f_get_supertrend(secondary_timeframe, secondary_multiplier, secondary_atr_length)
+secondary_trend_direction = secondary_direction < 0 ? 1 : -1
+secondary_line_color = secondary_trend_direction == 1 ? secondary_bull_color : secondary_bear_color
+///   DYNAMIC LINE   ///
+var line secondary_line = na
+secondary_line := f_update_dynamic_line(secondary_line, secondary_supertrend, secondary_trend_direction, secondary_line_color, 1, line.style_dotted)
+///   HORIZONTAL DOTTED LINE   ///
+var line secondary_line_h = na
+secondary_line_h := f_update_horizontal_line(secondary_line_h, secondary_supertrend, secondary_line_color, 1)
+
+// ==========================================
+// UI RENDER & INTERFACE
+// ==========================================
+
+var table _hud = table.new(position.top_left, 1, 1)
+if barstate.islast
+    table.cell(_hud, 0, 0, "AXYGATE", text_color=color.new(color.gray, 80), text_size=size.large, bgcolor=color.new(color.black, 100))
