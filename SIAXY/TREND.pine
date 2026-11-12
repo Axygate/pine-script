@@ -1,4 +1,21 @@
-
+// ============================================================================
+//                                   AXYGATE
+// Brand       : Axygate
+// Copyright   : © Axygate. All rights reserved
+// Project     : Axygate Core Systems
+// License     : GNU General Public License v3.0 (GPL-3.0)
+//               Free to use, modify, and share. Any derivative work must also 
+//               be open-source under GPL-3.0 (closed-source use is prohibited). 
+//               Original authorship and copyright notices must be preserved.
+// ============================================================================
+// ============================================================================
+//      █████╗ ██╗  ██╗██╗   ██╗██████╗  █████╗ ████████╗███████╗
+//     ██╔══██╗╚██╗██╔╝╚██╗ ██╔╝██╔════╝ ██╔══██╗╚══██╔══╝██╔════╝
+//     ███████║ ╚███╔╝  ╚████╔╝ ██║  ███╗███████║   ██║   █████╗  
+//     ██╔══██║ ██╔██╗   ╚██╔╝  ██║   ██║██╔══██║   ██║   ██╔══╝  
+//     ██║  ██║██╔╝ ██╗   ██║   ╚██████╔╝██║  ██║   ██║   ███████╗
+//     ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// ============================================================================
  //@version=6
 indicator("[Axygate] - SIAXY TREND", shorttitle="AXY - SIAXY", overlay=true, max_lines_count=500, max_labels_count=500)
 
