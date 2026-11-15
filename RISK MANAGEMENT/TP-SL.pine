@@ -59,11 +59,11 @@ showTradeLevels = input.bool(true, "Show Labels", group="Take Profit")
 showZones = input.bool(true, "Show Lines & Zones", group="Take Profit")
 
 // ============================================================================
-// CONFIGURAÇÃO EXTERNA
+// EXTERNAL CONFIGURATION
 // ============================================================================
-customLongSignal  = qqeLong
-customShortSignal = qqeShort
-customSLValue = st1_val_clean
+customLongSignal  = // Long Entry Condition
+customShortSignal = // Short Entry Condition
+customSLValue     = // Set the Stop Loss
 
 // ============================================================================
 // TRADE VARIABLES
